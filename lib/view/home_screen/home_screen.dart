@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:notes_app/controller/home_screen_controller.dart';
+import 'package:notes_app/controller/note_screen_controller.dart';
 import 'package:notes_app/view/home_screen/widgets/add_note_form.dart';
 
+import '../../model/note_model.dart';
 import 'widgets/note_card.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,6 +25,18 @@ class _HomeScreenState extends State<HomeScreen> {
         itemBuilder: (context, index) {
           return NoteCard(
             item: NotesScreenController.notesList[index],
+            onDeletePressed: () {
+              NotesScreenController.deleteNoteAt(index: index);
+              setState(() {});
+            },
+            onEditPressed: () {
+              showCustomBottomSheet(
+                context: context,
+                isEdit: true,
+                noteModel: NotesScreenController.notesList[index],
+                index: index,
+              );
+            },
           );
         },
         separatorBuilder: (BuildContext context, int index) {
@@ -33,18 +46,32 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            builder: (context) {
-              return AddNoteForm(
-                setState: setState,
-              );
-            },
-          );
+          showCustomBottomSheet(context: context);
         },
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  Future<dynamic> showCustomBottomSheet({
+    required BuildContext context,
+    bool isEdit = false,
+    NoteModel? noteModel,
+    int? index,
+  }) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return AddNoteForm(
+          onComplete: () {
+            setState(() {});
+          },
+          isEdit: isEdit,
+          item: noteModel,
+          index: index,
+        );
+      },
     );
   }
 }

@@ -23,11 +23,7 @@ class MyApp extends StatelessWidget {
           foregroundColor: ColorConstants.primaryWhite,
         ),
         bottomSheetTheme: BottomSheetThemeData(
-          backgroundColor: ColorConstants.scaffoldBackgroundColor
-              .withGreen(30)
-              .withBlue(30)
-              .withRed(30),
-        ),
+            backgroundColor: ColorConstants.bottomSheetBackgroundColor),
       ),
       home: const SplashScreen(),
     );

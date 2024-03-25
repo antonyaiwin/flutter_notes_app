@@ -1,22 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:notes_app/model/note_model.dart';
 
-import '../../../controller/home_screen_controller.dart';
+import '../../../controller/note_screen_controller.dart';
 
-class AddNoteForm extends StatelessWidget {
-  const AddNoteForm({super.key, required this.setState});
-  final void Function(void Function()) setState;
+class AddNoteForm extends StatefulWidget {
+  const AddNoteForm({
+    super.key,
+    required this.onComplete,
+    this.isEdit = false,
+    this.item,
+    this.index,
+  });
+  final void Function()? onComplete;
+  final bool isEdit;
+  final NoteModel? item;
+  final int? index;
+
+  @override
+  State<AddNoteForm> createState() => _AddNoteFormState();
+}
+
+class _AddNoteFormState extends State<AddNoteForm> {
+  final TextEditingController titleController = TextEditingController();
+
+  final TextEditingController descriptionController = TextEditingController();
+
+  final TextEditingController dateController = TextEditingController();
+
+  int selectedColorIndex = 0;
+  @override
+  void initState() {
+    if (widget.item != null) {
+      titleController.text = widget.item!.title;
+      descriptionController.text = widget.item!.description;
+      dateController.text = widget.item!.date;
+      selectedColorIndex = widget.item!.colorIndex;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       padding: const EdgeInsets.all(15),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
+            controller: titleController,
             decoration: InputDecoration(
               hintText: 'Title',
-              hintStyle: const TextStyle(color: Colors.black38),
+              hintStyle: const TextStyle(color: Colors.black54),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -26,11 +61,12 @@ class AddNoteForm extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           TextFormField(
+            controller: descriptionController,
             maxLines: 3,
             minLines: 3,
             decoration: InputDecoration(
               hintText: 'Description',
-              hintStyle: const TextStyle(color: Colors.black38),
+              hintStyle: const TextStyle(color: Colors.black54),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -40,9 +76,10 @@ class AddNoteForm extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           TextFormField(
+            controller: dateController,
             decoration: InputDecoration(
               hintText: 'Date',
-              hintStyle: const TextStyle(color: Colors.black38),
+              hintStyle: const TextStyle(color: Colors.black54),
               suffixIcon: IconButton(
                 onPressed: () {},
                 icon: const Icon(Icons.calendar_month),
@@ -54,53 +91,63 @@ class AddNoteForm extends StatelessWidget {
               fillColor: Colors.white,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: BorderRadius.circular(10),
+            children: List.generate(
+              NotesScreenController.bgColorList.length,
+              (index) => InkWell(
+                onTap: () {
+                  setState(() {
+                    selectedColorIndex = index;
+                  });
+                },
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  decoration: BoxDecoration(
+                      color: NotesScreenController.bgColorList[index],
+                      borderRadius: BorderRadius.circular(10),
+                      border: selectedColorIndex == index
+                          ? Border.all(
+                              color: Colors.black,
+                              width: 5,
+                              strokeAlign: BorderSide.strokeAlignOutside,
+                            )
+                          : null),
                 ),
               ),
-              Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              Container(
-                height: 50,
-                width: 50,
-                decoration: BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ],
+            ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               InkWell(
                 onTap: () {
-                  NotesScreenController.addNote();
+                  if (widget.isEdit) {
+                    NotesScreenController.editNote(
+                      index: widget.index!,
+                      item: NoteModel(
+                        title: titleController.text,
+                        description: descriptionController.text,
+                        date: dateController.text,
+                        colorIndex: selectedColorIndex,
+                      ),
+                    );
+                  } else {
+                    NotesScreenController.addNote(
+                      item: NoteModel(
+                        title: titleController.text,
+                        description: descriptionController.text,
+                        date: dateController.text,
+                        colorIndex: selectedColorIndex,
+                      ),
+                    );
+                  }
+
                   Navigator.pop(context);
-                  setState(() {});
+                  widget.onComplete!();
                 },
                 child: Container(
                   width: 100,
@@ -110,10 +157,11 @@ class AddNoteForm extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  child: const Text(
-                    'Add',
-                    style: TextStyle(
+                  child: Text(
+                    widget.isEdit ? 'Save' : 'Add',
+                    style: const TextStyle(
                       color: Colors.green,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -134,6 +182,7 @@ class AddNoteForm extends StatelessWidget {
                     'Cancel',
                     style: TextStyle(
                       color: Colors.red,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),

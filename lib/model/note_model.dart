@@ -3,7 +3,7 @@ class NoteModel {
   String title;
   String description;
   String date;
-  String colorIndex;
+  int colorIndex;
   NoteModel({
     required this.title,
     required this.description,

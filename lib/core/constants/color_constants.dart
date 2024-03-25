@@ -6,5 +6,6 @@ class ColorConstants {
   static Color color3 = const Color(0xFFFFCF81);
   static Color color4 = const Color(0xFFFDFFAB);
   static Color scaffoldBackgroundColor = Colors.black;
+  static Color bottomSheetBackgroundColor = Color.fromARGB(255, 104, 104, 104);
   static Color primaryWhite = Colors.white;
 }
