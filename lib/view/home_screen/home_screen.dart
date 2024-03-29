@@ -37,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 index: index,
               );
             },
+            onSharePressed: () {},
           );
         },
         separatorBuilder: (BuildContext context, int index) {

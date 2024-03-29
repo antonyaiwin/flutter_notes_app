@@ -27,7 +27,13 @@ class NoteCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(child: Text(item.title)),
+              Expanded(
+                  child: Text(
+                item.title,
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              )),
               IconButton(
                 onPressed: onEditPressed,
                 icon: const Icon(Icons.edit),
@@ -38,7 +44,11 @@ class NoteCard extends StatelessWidget {
               ),
             ],
           ),
-          Text(item.description),
+          Text(
+            item.description,
+            maxLines: 5,
+            overflow: TextOverflow.ellipsis,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

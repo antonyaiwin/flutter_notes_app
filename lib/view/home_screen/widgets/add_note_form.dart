@@ -49,7 +49,15 @@ class _AddNoteFormState extends State<AddNoteForm> {
         key: formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text(
+              'Title',
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             TextFormField(
               controller: titleController,
               decoration: InputDecoration(
@@ -69,6 +77,13 @@ class _AddNoteFormState extends State<AddNoteForm> {
               },
             ),
             const SizedBox(height: 10),
+            const Text(
+              'Description',
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             TextFormField(
               controller: descriptionController,
               maxLines: 3,
@@ -90,6 +105,13 @@ class _AddNoteFormState extends State<AddNoteForm> {
               },
             ),
             const SizedBox(height: 10),
+            const Text(
+              'Date',
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             TextFormField(
               readOnly: true,
               onTap: () async {
