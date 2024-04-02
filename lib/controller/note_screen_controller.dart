@@ -1,23 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:notes_app/core/constants/color_constants.dart';
 import 'package:notes_app/model/note_model.dart';
 
 class NotesScreenController {
-  static List<NoteModel> notesList = [];
+  static List<dynamic> notesKeyList = [];
+  static var box = Hive.box('notesBox');
 
-  static void addNote({required NoteModel item}) {
-    notesList.add(item);
+  static Future<void> addNote({required NoteModel item}) async {
+    // notesList.add(item);
+    await box.add(item.toMap());
+    refreshNoteKeyList();
   }
 
-  static void deleteNoteAt({required int index}) {
-    notesList.removeAt(index);
+  static Future<void> deleteNote({required dynamic key}) async {
+    // notesList.removeAt(index);
+    await box.delete(key);
+    refreshNoteKeyList();
   }
 
-  static void editNote({
-    required int index,
+  static Future<void> editNote({
+    required dynamic key,
     required NoteModel item,
-  }) {
-    notesList[index] = item;
+  }) async {
+    // notesKeyList[index] = item;
+    await box.put(key, item.toMap());
+    refreshNoteKeyList();
   }
 
   static List<Color> bgColorList = [
@@ -26,4 +34,8 @@ class NotesScreenController {
     ColorConstants.color3,
     ColorConstants.color4,
   ];
+
+  static void refreshNoteKeyList() {
+    notesKeyList = box.keys.toList();
+  }
 }

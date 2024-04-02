@@ -10,12 +10,12 @@ class AddNoteForm extends StatefulWidget {
     required this.onComplete,
     this.isEdit = false,
     this.item,
-    this.index,
+    this.noteKey,
   });
   final void Function()? onComplete;
   final bool isEdit;
   final NoteModel? item;
-  final int? index;
+  final dynamic noteKey;
 
   @override
   State<AddNoteForm> createState() => _AddNoteFormState();
@@ -176,13 +176,13 @@ class _AddNoteFormState extends State<AddNoteForm> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 InkWell(
-                  onTap: () {
+                  onTap: () async {
                     if (!formKey.currentState!.validate()) {
                       return;
                     }
                     if (widget.isEdit) {
-                      NotesScreenController.editNote(
-                        index: widget.index!,
+                      await NotesScreenController.editNote(
+                        key: widget.noteKey!,
                         item: NoteModel(
                           title: titleController.text,
                           description: descriptionController.text,
@@ -191,7 +191,7 @@ class _AddNoteFormState extends State<AddNoteForm> {
                         ),
                       );
                     } else {
-                      NotesScreenController.addNote(
+                      await NotesScreenController.addNote(
                         item: NoteModel(
                           title: titleController.text,
                           description: descriptionController.text,
