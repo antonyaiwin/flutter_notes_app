@@ -7,6 +7,8 @@ class ColorConstants {
   static Color color4 = const Color(0xFFFDFFAB);
   static Color scaffoldBackgroundColor = Colors.black;
   static Color bottomSheetBackgroundColor =
-      const Color.fromARGB(255, 197, 197, 197);
+      const Color.fromARGB(255, 38, 38, 39);
   static Color primaryWhite = Colors.white;
+  static Color primaryBlack = Colors.black;
+  static Color inputFillColor = const Color.fromARGB(255, 35, 34, 36);
 }

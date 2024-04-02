@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
+        brightness: Brightness.dark,
         scaffoldBackgroundColor: ColorConstants.scaffoldBackgroundColor,
         appBarTheme: AppBarTheme(
           backgroundColor: ColorConstants.scaffoldBackgroundColor,
@@ -28,6 +29,17 @@ class MyApp extends StatelessWidget {
         ),
         bottomSheetTheme: BottomSheetThemeData(
             backgroundColor: ColorConstants.bottomSheetBackgroundColor),
+        inputDecorationTheme: InputDecorationTheme(
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide(
+                  color: ColorConstants.primaryWhite.withOpacity(0.5))),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: BorderSide.none),
+          filled: true,
+          fillColor: ColorConstants.inputFillColor,
+        ),
       ),
       home: const SplashScreen(),
     );
